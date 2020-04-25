@@ -26,23 +26,6 @@ function setup() {
 	image(sorted, img.width, 0);
 }
 
-/*function loadPixelInfo(image) {
-	for (let j = 0; j < image.pixels.length; j += 4) {
-		let pixel = color(
-			image.pixels[j],
-			image.pixels[j + 1],
-			image.pixels[j + 2],
-			image.pixels[j + 3]
-		);
-
-		pixel.originalIndex = j;
-		pixel.brightness = brightness(pixel);
-		pixel.hue = hue(pixel);
-
-		customPixels.push(pixel);
-	}
-}*/
-
 function updatePixelPosition(image) {
 	for (let i = 0; i < customPixels.length; ++i) {
 		let updatedPixel = customPixels[i];
