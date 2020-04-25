@@ -13,7 +13,8 @@ function setup() {
 	sorted = img.get();
 	sorted.loadPixels();
 
-	loadPixelInfo(sorted);
+	//customPixels = loadPixelInfo(sorted);
+	customPixels = sorted.loadPixelInfo();
 
 	customPixels.sort((a, b) => a.brightness - b.brightness);
 
@@ -25,7 +26,7 @@ function setup() {
 	image(sorted, img.width, 0);
 }
 
-function loadPixelInfo(image) {
+/*function loadPixelInfo(image) {
 	for (let j = 0; j < image.pixels.length; j += 4) {
 		let pixel = color(
 			image.pixels[j],
@@ -40,7 +41,7 @@ function loadPixelInfo(image) {
 
 		customPixels.push(pixel);
 	}
-}
+}*/
 
 function updatePixelPosition(image) {
 	for (let i = 0; i < customPixels.length; ++i) {
