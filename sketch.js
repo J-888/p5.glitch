@@ -7,14 +7,14 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(img.width * 2, img.height);
+	createCanvas(img.width, img.height * 2);
 
 	sorted = createImage(img.width, img.height);
 	sorted = img.get();
 	sorted.loadPixels();
 
-	//customPixels = loadPixelInfo(sorted);
-	customPixels = sorted.loadPixelInfo();
+	customPixels = loadPixelInfo(sorted);
+	//customPixels = sorted.loadPixelInfo();
 
 	customPixels.sort((a, b) => a.brightness - b.brightness);
 
@@ -23,7 +23,7 @@ function setup() {
 
 	background(0);
 	image(img, 0, 0);
-	image(sorted, img.width, 0);
+	image(sorted, 0, img.height);
 }
 
 function updatePixelPosition(image) {
