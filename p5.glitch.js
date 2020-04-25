@@ -24,4 +24,20 @@ p5.prototype.loadPixelInfo = function (image) {
 	return image.loadPixelInfo();
 };
 
-//p5.prototype.registerMethod('loadPixelInfo', p5.prototype.loadPixelInfo1);
+p5.Image.prototype.refreshImageContent = function (pixelInfo) {
+	for (let i = 0; i < customPixels.length; ++i) {
+		let updatedPixel = customPixels[i];
+		let levels = updatedPixel.levels;
+		let pos = 4 * i;
+		this.pixels[pos] = levels[0];
+		this.pixels[pos + 1] = levels[1];
+		this.pixels[pos + 2] = levels[2];
+		this.pixels[pos + 3] = levels[3];
+	}
+
+	this.updatePixels();
+};
+
+p5.prototype.refreshImageContent = function (image, pixelInfo) {
+	image.refreshImageContent(pixelInfo);
+};

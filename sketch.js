@@ -13,27 +13,15 @@ function setup() {
 	sorted = img.get();
 	sorted.loadPixels();
 
-	customPixels = loadPixelInfo(sorted);
-	//customPixels = sorted.loadPixelInfo();
+	//customPixels = loadPixelInfo(sorted);
+	customPixels = sorted.loadPixelInfo();
 
 	customPixels.sort((a, b) => a.brightness - b.brightness);
 
-	updatePixelPosition(sorted);
-	sorted.updatePixels();
+	//sorted.refreshImageContent(sorted, customPixels);
+	sorted.refreshImageContent(customPixels);
 
 	background(0);
 	image(img, 0, 0);
 	image(sorted, 0, img.height);
-}
-
-function updatePixelPosition(image) {
-	for (let i = 0; i < customPixels.length; ++i) {
-		let updatedPixel = customPixels[i];
-		let levels = updatedPixel.levels;
-		let pos = 4 * i;
-		image.pixels[pos] = levels[0];
-		image.pixels[pos + 1] = levels[1];
-		image.pixels[pos + 2] = levels[2];
-		image.pixels[pos + 3] = levels[3];
-	}
 }
