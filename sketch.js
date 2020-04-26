@@ -18,9 +18,7 @@ function setup() {
 
 	//customPixels.sort((a, b) => a.brightness - b.brightness);
 
-
-	//customPixels.sort((a, b) => a.brightness - b.brightness);
-	allRowSort();
+	customPixels = allRowSort(sorted, customPixels);
 
 	//sorted.refreshImageContent(sorted, customPixels);
 	sorted.refreshImageContent(customPixels);
@@ -28,13 +26,4 @@ function setup() {
 	background(0);
 	image(img, 0, 0);
 	image(sorted, 0, img.height);
-}
-
-function allRowSort(){
-	for (let row = 0; row < img.height; ++row) {
-		/*let start = row * img.width;
-		let end = start + img.width;
-		customPixels = partialHorizontalSort(customPixels, start, end);*/
-		customPixels = singleRowSort(customPixels, row);
-	}
 }
