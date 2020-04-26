@@ -75,3 +75,8 @@ p5.prototype.partialHorizontalSort = function (pixelInfo, start, end) {
 	}
 	return pixelInfo;
 }
+p5.prototype.singleRowSort = function (pixelInfo, row) {
+	let start = row * img.width;
+	let end = start + img.width;
+	return partialHorizontalSort(pixelInfo, start, end);
+}

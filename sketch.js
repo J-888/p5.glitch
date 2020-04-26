@@ -32,8 +32,9 @@ function setup() {
 
 function allRowSort(){
 	for (let row = 0; row < img.height; ++row) {
-		let start = row * img.width;
+		/*let start = row * img.width;
 		let end = start + img.width;
-		customPixels = partialHorizontalSort(customPixels, start, end);
+		customPixels = partialHorizontalSort(customPixels, start, end);*/
+		customPixels = singleRowSort(customPixels, row);
 	}
 }
