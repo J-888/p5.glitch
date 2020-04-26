@@ -63,3 +63,15 @@ p5.Image.prototype.refreshImageContent = function (pixelInfo) {
 p5.prototype.refreshImageContent = function (image, pixelInfo) {
 	image.refreshImageContent(pixelInfo);
 };
+
+
+
+p5.prototype.partialHorizontalSort = function (pixelInfo, start, end) {
+	let sortedPart = pixelInfo
+		.slice(start, end)
+		.sort((a, b) => a.brightness - b.brightness);
+	for (let i = 0; i < sortedPart.length; ++i) {
+		pixelInfo[start + i] = sortedPart[i];
+	}
+	return pixelInfo;
+}
