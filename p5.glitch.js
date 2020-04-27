@@ -6,24 +6,99 @@
  * @returns {Object[]} Array with precalculated info of each pixel
  */
 p5.Image.prototype.loadPixelInfo = function () {
-	let customPixels = [];
+	let customPixels = Array(this.pixels.length/4);
+	let pixelInd = 0;
+
+	/*let pixel = { // custom color for massive performance improvements		
+		levels: [ 0, 0, 0, 0 ],
+	};*/
+
 	for (let j = 0; j < this.pixels.length; j += 4) {
-		let pixel = color(
+		/*let pixel = color(
 			this.pixels[j],
 			this.pixels[j + 1],
 			this.pixels[j + 2],
 			this.pixels[j + 3]
+		);*/
+
+		// custom color for massive performance improvements
+		let pixel = {
+			levels: [
+				this.pixels[j],
+				this.pixels[j + 1],
+				this.pixels[j + 2],
+				this.pixels[j + 3]
+			]
+		}
+
+		/*pixel.levels[0] = this.pixels[j];
+		pixel.levels[1] = this.pixels[j + 1];
+		pixel.levels[2] = this.pixels[j + 2];
+		pixel.levels[3] = this.pixels[j + 3];*/
+
+		//pixel.originalIndex = pixelInd;
+
+		//pixel.brightness = brightness(pixel);	// default brightness, much slower
+		//pixel.brightness = luma709(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
+		//pixel.brightness = luma709OptimizedToCompare(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
+		//pixel.brightness = luma601(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
+		//pixel.brightness = luma601OptimizedToCompare(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
+		//pixel.brightness = aproximationA(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
+		//pixel.brightness = aproximationAOptimizedToCompare(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
+		//pixel.brightness = aproximationB(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
+		pixel.brightness = aproximationBOptimizedToCompare(
+			pixel.levels[0],
+			pixel.levels[1],
+			pixel.levels[2]
 		);
 
-		pixel.originalIndex = j;
-		pixel.brightness = brightness(pixel);
-		pixel.hue = hue(pixel);
+		//pixel.hue = hue(pixel);
 
-		customPixels.push(pixel);
+		customPixels[pixelInd++] = pixel;
 	}
 
 	return customPixels;
 };
+
+function makeCustomColor(r, g, b, a) {
+	return {
+		levels: [r, g, b, a]
+	};
+}
+
+/* benchmarks at https://jsperf.com/luminance */
+
+function luma709(r, g, b) {
+	return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function luma709OptimizedToCompare(r, g, b) {
+	return 2126 * r + 7152 * g + 722 * b;
+}
+
+function luma601(r, g, b) {
+	return 0.299 * r + 0.587 * g + 0.114 * b;
+}
+
+function luma601OptimizedToCompare(r, g, b) {
+	return 299 * r + 587 * g + 114 * b;
+}
+
+function aproximationA(r, g, b) {
+	return (r + r + g + g + g + b) / 6;
+}
+
+function aproximationAOptimizedToCompare(r, g, b) {
+	return r + r + g + g + g + b;
+}
+
+function aproximationB(r, g, b) {
+	return (r + r + r + g + g + g + g + b) >> 3;
+}
+
+function aproximationBOptimizedToCompare(r, g, b) {
+	return r + r + r + g + g + g + g + b;
+}
 
 /**
  * Precalculates info of each pixel

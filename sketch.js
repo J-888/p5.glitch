@@ -3,6 +3,8 @@ let sorted;
 let customPixels = [];
 
 function preload() {
+	//img = loadImage('data/quarterrgb.png');
+	//img = loadImage('data/allrgb.png');
 	img = loadImage('data/example.jpg');
 }
 
