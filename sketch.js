@@ -20,7 +20,9 @@ function setup() {
 
 	//customPixels.sort((a, b) => a.brightness - b.brightness);
 
-	customPixels = allRowSort(sorted, customPixels);
+	//customPixels = allRowSort(sorted, customPixels);
+
+	customPixels = allRowSortOverThreshold(sorted, customPixels, 600);
 
 	//sorted.refreshImageContent(sorted, customPixels);
 	sorted.refreshImageContent(customPixels);

@@ -46,11 +46,7 @@ p5.Image.prototype.loadPixelInfo = function () {
 		//pixel.brightness = aproximationA(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
 		//pixel.brightness = aproximationAOptimizedToCompare(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
 		//pixel.brightness = aproximationB(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
-		pixel.brightness = aproximationBOptimizedToCompare(
-			pixel.levels[0],
-			pixel.levels[1],
-			pixel.levels[2]
-		);
+		pixel.brightness = aproximationBOptimizedToCompare(pixel.levels[0], pixel.levels[1], pixel.levels[2]);
 
 		//pixel.hue = hue(pixel);
 
@@ -166,6 +162,41 @@ p5.prototype.allRowSort = function (image, pixelInfo) {
 		end += image.width;*/
 
 		customPixels = singleRowSort(image, customPixels, row);
+	}
+
+	return pixelInfo;
+};
+
+function roundUpToBase(x, base) {
+	return Math.ceil(x / base) * base;
+}
+
+p5.prototype.allRowSortOverThreshold = function (image, pixelInfo, threshold) {
+	for (let start = 0; start < pixelInfo.length; ++start) {
+		let currentPixel = pixelInfo[start];
+		if (currentPixel.brightness > threshold) {
+			let underThreshold = true;
+			let rowEnd = roundUpToBase(start + 1, image.width);
+			for (
+				let end = start + 1;
+				underThreshold && end < pixelInfo.length && end < rowEnd;
+				++end
+			) {
+				currentPixel = pixelInfo[end];
+				if (currentPixel.brightness < threshold) {
+					/*let sorted = partialHorizontalSort(pixelInfo, start, end);
+
+					for (let i = 0; i < sorted.length; ++i) {
+						pixelInfo[start + i] = sorted[i];
+					}*/
+
+					pixelInfo = partialHorizontalSort(pixelInfo, start, end);
+
+					underThreshold = false;
+					start = end + 1;
+				}
+			}
+		}
 	}
 
 	return pixelInfo;
