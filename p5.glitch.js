@@ -6,7 +6,7 @@
  * @returns {Object[]} Array with precalculated info of each pixel
  */
 p5.Image.prototype.loadPixelInfo = function () {
-	let customPixels = Array(this.pixels.length/4);
+	let pixelInfo = Array(this.pixels.length/4);
 	let pixelInd = 0;
 
 	/*let pixel = { // custom color for massive performance improvements		
@@ -50,10 +50,10 @@ p5.Image.prototype.loadPixelInfo = function () {
 
 		//pixel.hue = hue(pixel);
 
-		customPixels[pixelInd++] = pixel;
+		pixelInfo[pixelInd++] = pixel;
 	}
 
-	return customPixels;
+	return pixelInfo;
 };
 
 function makeCustomColor(r, g, b, a) {
@@ -112,8 +112,8 @@ p5.prototype.loadPixelInfo = function (image) {
  * @param {Object[]} pixelInfo Array with precalculated info of each pixel
  */
 p5.Image.prototype.refreshImageContent = function (pixelInfo) {
-	for (let i = 0; i < customPixels.length; ++i) {
-		let updatedPixel = customPixels[i];
+	for (let i = 0; i < pixelInfo.length; ++i) {
+		let updatedPixel = pixelInfo[i];
 		let levels = updatedPixel.levels;
 		let pos = 4 * i;
 		this.pixels[pos] = levels[0];
@@ -157,11 +157,11 @@ p5.prototype.allRowSort = function (image, pixelInfo) {
 	let start = 0;
 	let end = image.width;
 	for (let row = 0; row < image.height; ++row) {
-		/*customPixels = partialHorizontalSort(customPixels, start, end);
+		/*pixelInfo = partialHorizontalSort(pixelInfo, start, end);
 		start = end;
 		end += image.width;*/
 
-		customPixels = singleRowSort(image, customPixels, row);
+		pixelInfo = singleRowSort(image, pixelInfo, row);
 	}
 
 	return pixelInfo;
@@ -218,20 +218,6 @@ function spliceAndInsert(array, spliceIndex, insertIndex, n) {
 	return array;
 };
 
-/*
-ABCDE
-FGHIJ - I at inxed 8
-KLMNÑ
-
-ABCDE
-FGH   -> spliced IJ
-KLMNÑ
-
-ABCDE
-IJFGH   
-KLMNÑ
-*/
-
 function horizontalWrapRight (image, pixelInfo, rowStart, rowEnd, xOffset) {
 	for (let currentRow = rowStart; currentRow < image.height && currentRow < rowEnd; ++currentRow) {
 			let spliceIndex = (currentRow+1) * image.width - xOffset;
@@ -270,3 +256,118 @@ p5.prototype.horizontalWrap = function (image, pixelInfo, rowStart, rowEnd, xOff
 		return horizontalWrapLeft(image, pixelInfo, rowStart, rowEnd, image.width - xOffset);
 	}
 };
+
+p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
+	let newPixelInfo = Array(pixelInfo.length);
+
+	//let half = floor(pixelInfo.length / 2);
+	//let end = pixelInfo.length;
+
+	let halfRow = floor(image.height / 2);
+	let interlacing = 0;
+	let start = 0;
+	let end = image.width;
+
+	for (let fromRow = 0; fromRow < halfRow; ++fromRow) {
+		for (let i = 0; i < image.width; ++i) {
+			newPixelInfo[interlacing + i] = pixelInfo[start + i];
+		}
+		start = end;
+		end += image.width;
+		interlacing = start * 2;
+	}
+
+	interlacing = image.width;
+	for (let fromRow = halfRow; fromRow < image.height; ++fromRow) {
+		for (let i = 0; i < image.width; ++i) {
+			newPixelInfo[interlacing + i] = pixelInfo[start + i];
+		}
+		start = end;
+		end += image.width;
+		interlacing += image.width * 2;
+	}
+
+	return newPixelInfo;
+};
+
+// WRONG
+/*p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
+	let newPixelInfo = Array(pixelInfo.length);
+
+	//let half = floor(pixelInfo.length / 2);
+	//let end = pixelInfo.length;
+
+	let start = 0;
+	let end = image.width;
+	let halfRow = floor(image.height / 2);
+	let halfPixel = floor(pixelInfo.length / 2);
+	for (let fromRow = 0; fromRow < image.height; ++fromRow) {
+		let isInterlaced = fromRow % 2;
+		let toRow = fromRow % 2 ? fromRow + halfRow : fromRow;
+		if(isInterlaced) {
+			for (let i = start; i < end; ++i) {
+				newPixelInfo[i + halfPixel] = pixelInfo[i];
+			}
+		}
+		else {
+			for (let i = start; i < end; ++i) {
+				newPixelInfo[i] = pixelInfo[i];
+			}
+		}
+		start = end;
+		end += image.width;
+	}
+
+	return newPixelInfo;
+};*/
+
+// WEIRD
+/*p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
+	let newPixelInfo = Array(pixelInfo.length);
+
+	let half = floor(pixelInfo.length / 2);
+	let end = pixelInfo.length;
+
+	for (let i = 0; i < half; ++i) {
+		newPixelInfo[i * 2] = pixelInfo[i];
+	}
+
+	let j = 1;
+	for (let i = half; i < end; ++i) {
+		newPixelInfo[j] = pixelInfo[i];
+		j += 2;
+	}
+
+	return newPixelInfo;
+};*/
+
+
+/* interlacing: push back index: 1 2 3 4 5 6
+from
+ABCDEFabcdef
+to
+AaBbCcDdEeFf
+*/
+
+/*p5.prototype.deinterlacing = function (image, pixelInfo, bandHeight) {
+	let buffer = [];
+	let bufferIndex = 0;
+	let currentRow = floor(image.height/2);
+	let spliceIndex = currentRow * image.width;
+	while (pixelInfo[spliceIndex]) {
+		buffer[bufferIndex] = pixelInfo.splice(spliceIndex, image.width);
+		++bufferIndex;
+	}
+
+	for(let i = 0; i < spliceIndex.length)
+
+	return pixelInfo;
+};*/
+
+
+/* Deinterlacing: push back index: 1 2 3 4 5 6
+from
+AaBbCcDdEeFf
+to
+ABCDEFabcdef
+*/

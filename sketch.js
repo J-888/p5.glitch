@@ -1,8 +1,10 @@
 let img;
 let sorted;
-let customPixels = [];
+let pixelInfo = [];
 
-function preload() {
+function preload() {	
+	//img = loadImage('data/10x10Split.png');
+	//img = loadImage('data/400x800Split.png');
 	//img = loadImage('data/quarterrgb.png');
 	//img = loadImage('data/allrgb.png');
 	img = loadImage('data/example.jpg');
@@ -15,19 +17,21 @@ function setup() {
 	sorted = img.get();
 	sorted.loadPixels();
 
-	//customPixels = loadPixelInfo(sorted);
-	customPixels = sorted.loadPixelInfo();
+	//pixelInfo = loadPixelInfo(sorted);
+	pixelInfo = sorted.loadPixelInfo();
 
-	//customPixels.sort((a, b) => a.brightness - b.brightness);
+	//pixelInfo.sort((a, b) => a.brightness - b.brightness);
 
-	//customPixels = allRowSort(sorted, customPixels);
+	//pixelInfo = allRowSort(sorted, pixelInfo);
 
-	//customPixels = allRowSortOverThreshold(sorted, customPixels, 600);
+	//pixelInfo = allRowSortOverThreshold(sorted, pixelInfo, 600);
 
-	customPixels = horizontalWrap(sorted, customPixels, 400, 600, -50);
+	//pixelInfo = horizontalWrap(sorted, pixelInfo, 400, 600, -50);
 
-	//sorted.refreshImageContent(sorted, customPixels);
-	sorted.refreshImageContent(customPixels);
+	pixelInfo = interlacing(sorted, pixelInfo, 1);
+
+	//sorted.refreshImageContent(sorted, pixelInfo);
+	sorted.refreshImageContent(pixelInfo);
 
 	background(0);
 	image(img, 0, 0);
