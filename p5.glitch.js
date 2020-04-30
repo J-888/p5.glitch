@@ -266,25 +266,25 @@ p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
 	let halfRow = ceil(image.height / 2);
 	let interlacing = 0;
 	let start = 0;
-	let end = image.width;
+	let end = image.width * bandHeight;
 
-	for (let fromRow = 0; fromRow < halfRow; ++fromRow) {
-		for (let i = 0; i < image.width; ++i) {
+	for (let fromRow = 0; fromRow < halfRow; fromRow += bandHeight) {
+		for (let i = 0; i < image.width * bandHeight; ++i) {
 			newPixelInfo[interlacing + i] = pixelInfo[start + i];
 		}
 		start = end;
-		end += image.width;
+		end += image.width * bandHeight;
 		interlacing = start * 2;
 	}
 
-	interlacing = image.width;
-	for (let fromRow = halfRow; fromRow < image.height; ++fromRow) {
-		for (let i = 0; i < image.width; ++i) {
+	interlacing = image.width * bandHeight;
+	for (let fromRow = halfRow; fromRow < image.height; fromRow += bandHeight) {
+		for (let i = 0; i < image.width * bandHeight; ++i) {
 			newPixelInfo[interlacing + i] = pixelInfo[start + i];
 		}
 		start = end;
-		end += image.width;
-		interlacing += image.width * 2;
+		end += image.width * bandHeight;
+		interlacing += image.width * bandHeight * 2;
 	}
 
 	return newPixelInfo;
