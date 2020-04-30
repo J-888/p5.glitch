@@ -22,7 +22,9 @@ function setup() {
 
 	//customPixels = allRowSort(sorted, customPixels);
 
-	customPixels = allRowSortOverThreshold(sorted, customPixels, 600);
+	//customPixels = allRowSortOverThreshold(sorted, customPixels, 600);
+
+	customPixels = horizontalWrap(sorted, customPixels, 400, 600, -50);
 
 	//sorted.refreshImageContent(sorted, customPixels);
 	sorted.refreshImageContent(customPixels);

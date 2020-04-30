@@ -201,3 +201,99 @@ p5.prototype.allRowSortOverThreshold = function (image, pixelInfo, threshold) {
 
 	return pixelInfo;
 };
+
+/*function rotateRight (array, n) {
+	array.unshift.apply( array, array.splice( n, array.length ) );
+	return array;
+};
+
+function insert(array1, array2, index) {
+	array1.splice.apply(array1, [index, 0].concat(array2));
+	return array1;
+};*/
+
+function spliceAndInsert(array, spliceIndex, insertIndex, n) {
+	let wrapped = array.splice(spliceIndex, n);
+	array.splice.apply(array, [insertIndex, 0].concat(wrapped));
+	return array;
+};
+
+/*
+ABCDE
+FGHIJ - I at inxed 8
+KLMNÑ
+
+ABCDE
+FGH   -> spliced IJ
+KLMNÑ
+
+ABCDE
+IJFGH   
+KLMNÑ
+*/
+
+function horizontalWrapRight (image, pixelInfo, rowStart, rowEnd, xOffset) {
+	for (let currentRow = rowStart; currentRow < image.height && currentRow < rowEnd; ++currentRow) {
+			let spliceIndex = (currentRow+1) * image.width - xOffset;
+			let insertIndex = currentRow * image.width;
+			pixelInfo = spliceAndInsert(pixelInfo, spliceIndex, insertIndex, xOffset);
+	}
+
+	return pixelInfo;
+};
+
+function horizontalWrapLeft (image, pixelInfo, rowStart, rowEnd, xOffset) {
+	for (let currentRow = rowStart; currentRow < image.height && currentRow < rowEnd; ++currentRow) {
+			let spliceIndex = currentRow * image.width + xOffset;
+			let insertIndex = (currentRow + 1) * image.width - 1;
+			pixelInfo = spliceAndInsert(pixelInfo, spliceIndex, insertIndex, xOffset);
+	}
+
+	return pixelInfo;
+};
+
+function mod(n, m) {
+	return ((n % m) + m) % m;
+};
+
+p5.prototype.horizontalWrap = function (image, pixelInfo, rowStart, rowEnd, xOffset) { // helper function
+	xOffset = mod(xOffset, image.width);
+	if (xOffset == 0) { // no wrap
+		console.log("noWrap");
+		return pixelInfo;
+	}
+	else if (xOffset <= image.width / 2) { // left wrap requires less operations
+		console.log('right wrap: ' + xOffset);
+		return horizontalWrapRight(image, pixelInfo, rowStart, rowEnd, xOffset);
+	}
+	else { // left wrap requires less operations
+		return horizontalWrapLeft(image, pixelInfo, rowStart, rowEnd, image.width - xOffset);
+	}
+};
+
+/*p5.prototype.horizontalWrap = function (image, pixelInfo, rowStart, rowEnd, xOffset) {
+	for (let currentRow = rowStart; currentRow < image.height && currentRow < rowEnd; ++currentRow) {
+			let spliceIndex = currentRow * image.width + xOffset;
+			let insertIndex = (currentRow + 1) * image.width - 1;
+			pixelInfo = spliceAndInsert(pixelInfo, spliceIndex, insertIndex, xOffset);
+	}
+
+	return pixelInfo;
+};*/
+
+/*
+
+ABCDE
+FGHIJ
+KLMNÑ
+
+ABCDE
+FGH   -> spliced IJ
+KLMNÑ
+
+ABCDE
+FGH   
+KLMNÑ
+
+
+*/
