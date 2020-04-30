@@ -270,30 +270,3 @@ p5.prototype.horizontalWrap = function (image, pixelInfo, rowStart, rowEnd, xOff
 		return horizontalWrapLeft(image, pixelInfo, rowStart, rowEnd, image.width - xOffset);
 	}
 };
-
-/*p5.prototype.horizontalWrap = function (image, pixelInfo, rowStart, rowEnd, xOffset) {
-	for (let currentRow = rowStart; currentRow < image.height && currentRow < rowEnd; ++currentRow) {
-			let spliceIndex = currentRow * image.width + xOffset;
-			let insertIndex = (currentRow + 1) * image.width - 1;
-			pixelInfo = spliceAndInsert(pixelInfo, spliceIndex, insertIndex, xOffset);
-	}
-
-	return pixelInfo;
-};*/
-
-/*
-
-ABCDE
-FGHIJ
-KLMNÑ
-
-ABCDE
-FGH   -> spliced IJ
-KLMNÑ
-
-ABCDE
-FGH   
-KLMNÑ
-
-
-*/
