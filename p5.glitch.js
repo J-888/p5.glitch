@@ -263,7 +263,7 @@ p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
 	//let half = floor(pixelInfo.length / 2);
 	//let end = pixelInfo.length;
 
-	let halfRow = floor(image.height / 2);
+	let halfRow = ceil(image.height / 2);
 	let interlacing = 0;
 	let start = 0;
 	let end = image.width;
