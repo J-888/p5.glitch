@@ -4,7 +4,9 @@ let pixelInfo = [];
 
 function preload() {	
 	//img = loadImage('data/10x10Split.png');
-	img = loadImage('data/16x32Split.png');
+	//img = loadImage('data/5x10Split.png');
+	img = loadImage('data/10x20Split.png');
+	//img = loadImage('data/16x32Split.png');
 	//img = loadImage('data/100x200Split.png');
 	//img = loadImage('data/400x800Split.png');
 	//img = loadImage('data/quarterrgb.png');
@@ -30,7 +32,7 @@ function setup() {
 
 	//pixelInfo = horizontalWrap(sorted, pixelInfo, 400, 600, -50);
 
-	pixelInfo = interlacing(sorted, pixelInfo, 2);
+	pixelInfo = interlacing(sorted, pixelInfo, 4);
 
 	//sorted.refreshImageContent(sorted, pixelInfo);
 	sorted.refreshImageContent(pixelInfo);
