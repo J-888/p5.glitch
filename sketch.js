@@ -3,9 +3,10 @@ let sorted;
 let pixelInfo = [];
 
 function preload() {	
+	
 	//img = loadImage('data/10x10Split.png');
 	//img = loadImage('data/5x10Split.png');
-	img = loadImage('data/10x20Split.png');
+	img = loadImage('data/100x200Split.png');
 	//img = loadImage('data/16x32Split.png');
 	//img = loadImage('data/100x200Split.png');
 	//img = loadImage('data/400x800Split.png');
@@ -15,7 +16,8 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(img.width, img.height * 2);
+	const margin = 0;
+	createCanvas(img.width, img.height * 2 + margin);
 
 	sorted = createImage(img.width, img.height);
 	sorted = img.get();
@@ -37,7 +39,9 @@ function setup() {
 	//sorted.refreshImageContent(sorted, pixelInfo);
 	sorted.refreshImageContent(pixelInfo);
 
+	//sorted.save('photo', 'jpg');
+
 	background(0);
 	image(img, 0, 0);
-	image(sorted, 0, img.height);
+	image(sorted, 0, img.height + margin);
 }
