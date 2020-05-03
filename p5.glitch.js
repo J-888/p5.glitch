@@ -260,9 +260,6 @@ p5.prototype.horizontalWrap = function (image, pixelInfo, rowStart, rowEnd, xOff
 p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
 	let newPixelInfo = Array(pixelInfo.length);
 
-	//let half = floor(pixelInfo.length / 2);
-	//let end = pixelInfo.length;
-
 	const halfRow = ceil(image.height / 2);
 	const halfPixel = ceil(pixelInfo.length / 2);
 	let interlacing = 0;
@@ -296,76 +293,6 @@ p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
 	return newPixelInfo;
 };
 
-/*p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
-	let newPixelInfo = Array(pixelInfo.length);
-
-	//let half = floor(pixelInfo.length / 2);
-	//let end = pixelInfo.length;
-
-	let halfRow = ceil(image.height / 2);
-	let halfPixel = ceil(pixelInfo.length / 2);
-	let interlacing = 0;
-	let start = 0;
-	let bandLength = image.width * bandHeight;
-
-	for (let fromRow = 0; fromRow < halfRow; fromRow += bandHeight) {
-		let bandEnd = bandLength;
-		if (start + bandLength > halfPixel) {
-			bandEnd = halfPixel - start;
-		}
-		let bandEnd = Math.min(bandLength, halfPixel - start);
-		for (let i = 0; i < bandEnd; ++i) {
-			newPixelInfo[interlacing + i] = pixelInfo[start + i];
-		}
-		start += bandEnd;
-		interlacing = start * 2;
-	}
-
-	//start = halfPixel;
-	interlacing = bandLength;
-	for (let fromRow = halfRow; fromRow < image.height; fromRow += bandHeight) {
-		let bandEnd = Math.min(bandLength, pixelInfo.length - start);
-		for (let i = 0; i < bandEnd; ++i) {
-			newPixelInfo[interlacing + i] = pixelInfo[start + i];
-		}
-		start += bandLength;
-		interlacing += bandLength * 2;
-	}
-
-	return newPixelInfo;
-};*/
-
-// WRONG
-/*p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
-	let newPixelInfo = Array(pixelInfo.length);
-
-	//let half = floor(pixelInfo.length / 2);
-	//let end = pixelInfo.length;
-
-	let start = 0;
-	let end = image.width;
-	let halfRow = floor(image.height / 2);
-	let halfPixel = floor(pixelInfo.length / 2);
-	for (let fromRow = 0; fromRow < image.height; ++fromRow) {
-		let isInterlaced = fromRow % 2;
-		let toRow = fromRow % 2 ? fromRow + halfRow : fromRow;
-		if(isInterlaced) {
-			for (let i = start; i < end; ++i) {
-				newPixelInfo[i + halfPixel] = pixelInfo[i];
-			}
-		}
-		else {
-			for (let i = start; i < end; ++i) {
-				newPixelInfo[i] = pixelInfo[i];
-			}
-		}
-		start = end;
-		end += image.width;
-	}
-
-	return newPixelInfo;
-};*/
-
 // WEIRD
 /*p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
 	let newPixelInfo = Array(pixelInfo.length);
@@ -385,14 +312,6 @@ p5.prototype.interlacing = function (image, pixelInfo, bandHeight) {
 
 	return newPixelInfo;
 };*/
-
-
-/* interlacing: push back index: 1 2 3 4 5 6
-from
-ABCDEFabcdef
-to
-AaBbCcDdEeFf
-*/
 
 /*p5.prototype.deinterlacing = function (image, pixelInfo, bandHeight) {
 	let buffer = [];
