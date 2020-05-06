@@ -6,13 +6,13 @@ function preload() {
 	
 	//img = loadImage('data/10x10Split.png');
 	//img = loadImage('data/5x10Split.png');
-	img = loadImage('data/100x200Split.png');
+	//img = loadImage('data/100x200Split.png');
 	//img = loadImage('data/16x32Split.png');
 	//img = loadImage('data/100x200Split.png');
 	//img = loadImage('data/400x800Split.png');
 	//img = loadImage('data/quarterrgb.png');
 	//img = loadImage('data/allrgb.png');
-	//img = loadImage('data/example.jpg');
+	img = loadImage('data/example.jpg');
 }
 
 function setup() {
@@ -44,4 +44,22 @@ function setup() {
 	background(0);
 	image(img, 0, 0);
 	image(sorted, 0, img.height + margin);
+
+	/* BUTTONS */	
+	const downloadBtn = createButton('Download');
+	downloadBtn.position(img.width + margin, 20);
+	downloadBtn.style('font-size', '25px');
+	downloadBtn.mousePressed(downloadResults);
+}
+
+function downloadResults(){
+	sorted.save('photo' + '_' + getDateString(), 'jpg');
+}
+
+function getDateString(){
+	return new Date()
+		.toISOString()
+		.slice(0,19)
+		.replace('T', '_')
+		.replace(/\:/g, '-');
 }
