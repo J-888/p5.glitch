@@ -147,10 +147,33 @@ p5.prototype.partialHorizontalSort = function (pixelInfo, start, end) {
 	return pixelInfo;
 }
 
+p5.prototype.partialVerticalSort = function (pixelInfo, width, height, start, end) {
+	let numPixels = Math.round((end - start) / width);
+	let sortedPart = Array(numPixels);
+
+	for (let i = 0; i < numPixels; ++i) {
+		sortedPart[i] = pixelInfo[i * width + start];
+	}
+
+	sortedPart.sort((a, b) => a.brightness - b.brightness);
+
+	for (let i = 0; i < numPixels; ++i) {
+		pixelInfo[i * width + start] = sortedPart[i];
+	}
+
+	return pixelInfo;
+};
+
 p5.prototype.singleRowSort = function (image, pixelInfo, row) {
 	let start = row * image.width;
 	let end = start + image.width;
 	return partialHorizontalSort(pixelInfo, start, end);
+};
+
+p5.prototype.singleColumnSort = function (image, pixelInfo, column) {
+	let start = column;
+	let end = pixelInfo.length - (image.width - column);
+	return partialVerticalSort(pixelInfo, image.width, image.height, start, end);
 };
 
 p5.prototype.allRowSort = function (image, pixelInfo) {

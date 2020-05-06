@@ -27,6 +27,9 @@ function setup() {
 	pixelInfo = sorted.loadPixelInfo();
 
 	//pixelInfo.sort((a, b) => a.brightness - b.brightness);
+	
+	//pixelInfo = singleRowSort(sorted, pixelInfo, 2);	
+	pixelInfo = singleColumnSort(sorted, pixelInfo, 2);
 
 	//pixelInfo = allRowSort(sorted, pixelInfo);
 
@@ -34,7 +37,7 @@ function setup() {
 
 	//pixelInfo = horizontalWrap(sorted, pixelInfo, 400, 600, -50);
 
-	pixelInfo = interlacing(sorted, pixelInfo, 4);
+	//pixelInfo = interlacing(sorted, pixelInfo, 4);
 
 	//sorted.refreshImageContent(sorted, pixelInfo);
 	sorted.refreshImageContent(pixelInfo);
