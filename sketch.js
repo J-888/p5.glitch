@@ -29,9 +29,10 @@ function setup() {
 	//pixelInfo.sort((a, b) => a.brightness - b.brightness);
 	
 	//pixelInfo = singleRowSort(sorted, pixelInfo, 2);	
-	pixelInfo = singleColumnSort(sorted, pixelInfo, 2);
+	//pixelInfo = singleColumnSort(sorted, pixelInfo, 0);
 
 	//pixelInfo = allRowSort(sorted, pixelInfo);
+	pixelInfo = allColumnSort(sorted, pixelInfo);
 
 	//pixelInfo = allRowSortOverThreshold(sorted, pixelInfo, 600);
 

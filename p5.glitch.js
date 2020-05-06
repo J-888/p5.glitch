@@ -148,7 +148,8 @@ p5.prototype.partialHorizontalSort = function (pixelInfo, start, end) {
 }
 
 p5.prototype.partialVerticalSort = function (pixelInfo, width, height, start, end) {
-	let numPixels = Math.round((end - start) / width);
+	let numPixels = 1 + Math.round((end - start) / width);
+
 	let sortedPart = Array(numPixels);
 
 	for (let i = 0; i < numPixels; ++i) {
@@ -172,19 +173,28 @@ p5.prototype.singleRowSort = function (image, pixelInfo, row) {
 
 p5.prototype.singleColumnSort = function (image, pixelInfo, column) {
 	let start = column;
-	let end = pixelInfo.length - (image.width - column);
+	//let end = pixelInfo.length - column;
+	let end = pixelInfo.length - image.width + column;
 	return partialVerticalSort(pixelInfo, image.width, image.height, start, end);
 };
 
 p5.prototype.allRowSort = function (image, pixelInfo) {
-	let start = 0;
-	let end = image.width;
+	//let start = 0;
+	//let end = image.width;
 	for (let row = 0; row < image.height; ++row) {
 		/*pixelInfo = partialHorizontalSort(pixelInfo, start, end);
 		start = end;
 		end += image.width;*/
 
 		pixelInfo = singleRowSort(image, pixelInfo, row);
+	}
+
+	return pixelInfo;
+};
+
+p5.prototype.allColumnSort = function (image, pixelInfo) {
+	for (let col = 0; col < image.width; ++col) {
+		pixelInfo = singleColumnSort(image, pixelInfo, col);
 	}
 
 	return pixelInfo;
